@@ -119,24 +119,24 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public static void postRequest(){
-
-        try{
-            URL url = new URL("http://exampleurl.com/");
-            HttpURLConnection client = (HttpURLConnection) url.openConnection();
-            client.setRequestMethod("POST");
-            client.setRequestProperty("Key","Value");
-            client.setDoOutput(true);
-
-            OutputStream outputPost = new BufferedOutputStream(client.getOutputStream());
-            outputPost.write();
-            outputPost.flush();
-            outputPost.close();
-        }catch (MalformedURLException e){
-
-        }catch (IOException e){
-
-        }
-
-    }
+//    public static void postRequest(){
+//
+//        try{
+//            URL url = new URL("http://exampleurl.com/");
+//            HttpURLConnection client = (HttpURLConnection) url.openConnection();
+//            client.setRequestMethod("POST");
+//            client.setRequestProperty("Key","Value");
+//            client.setDoOutput(true);
+//
+//            OutputStream outputPost = new BufferedOutputStream(client.getOutputStream());
+//            outputPost.write();
+//            outputPost.flush();
+//            outputPost.close();
+//        }catch (MalformedURLException e){
+//
+//        }catch (IOException e){
+//
+//        }
+//
+//    }
 }

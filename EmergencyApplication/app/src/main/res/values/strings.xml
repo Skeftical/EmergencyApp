@@ -2,4 +2,10 @@
     <string name="app_name">Emergency Application</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_other">Other</string>
+    <string name="injured">Are there people injured ?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="callback">Immediate Callback</string>
+    <string name="description">Provide a short description :</string>
+    <string name="submit">Submit Emergency Request</string>
 </resources>
