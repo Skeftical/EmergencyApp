@@ -7,12 +7,15 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,13 +23,22 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.util.AbstractMap;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                new PostRequest().execute();
 
 
             }
@@ -119,24 +132,64 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-//    public static void postRequest(){
-//
-//        try{
-//            URL url = new URL("http://exampleurl.com/");
-//            HttpURLConnection client = (HttpURLConnection) url.openConnection();
-//            client.setRequestMethod("POST");
-//            client.setRequestProperty("Key","Value");
-//            client.setDoOutput(true);
-//
-//            OutputStream outputPost = new BufferedOutputStream(client.getOutputStream());
-//            outputPost.write();
-//            outputPost.flush();
-//            outputPost.close();
-//        }catch (MalformedURLException e){
-//
-//        }catch (IOException e){
-//
+    private class PostRequest extends AsyncTask<URL, Integer, Void>{
+
+        private String getQuery(HashMap<String,String> params) throws UnsupportedEncodingException
+        {
+            StringBuilder result = new StringBuilder();
+            boolean first = true;
+
+            for (Map.Entry<String, String> pair : params.entrySet()){
+                if (first)
+                    first = false;
+                else
+                    result.append("&");
+
+                result.append(URLEncoder.encode(pair.getKey(), "UTF-8"));
+                result.append("=");
+                result.append(URLEncoder.encode(pair.getValue(), "UTF-8"));
+            }
+
+            return result.toString();
+        }
+
+        @Override
+        protected Void doInBackground(URL... urls) {
+            try{
+                URL url = new URL("http://192.168.10.62:8000/category/");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setReadTimeout(10000);
+                conn.setConnectTimeout(15000);
+                String userCredentials = "fotis:Apoel788";
+                String basicAuth = "Basic " + new String(Base64.encode(userCredentials.getBytes(),0));
+                conn.setRequestProperty ("Authorization", basicAuth);
+                conn.setRequestMethod("POST");
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+
+                HashMap<String, String> params = new HashMap<>();
+                params.put("name", "yiota");
+
+
+                OutputStream os = conn.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(os, "UTF-8"));
+                writer.write(getQuery(params));
+                writer.flush();
+                writer.close();
+                os.close();
+                conn.connect();
+                Log.w("TAG",conn.getResponseMessage());
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+
+            return null;
+
+        }
+//        protected void onPostExecute(Long result) {
+//            showDialog("Downloaded " + result + " bytes");
 //        }
-//
-//    }
+
+    }
 }
