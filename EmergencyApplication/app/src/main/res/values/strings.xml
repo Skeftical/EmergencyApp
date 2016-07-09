@@ -8,4 +8,7 @@
     <string name="callback">Immediate Callback</string>
     <string name="description">Provide a short description :</string>
     <string name="submit">Submit Emergency Request</string>
+    <string name="gps_network_not_enabled">GPS network is not enabled</string>
+    <string name="open_location_settings">Open location settings</string>
+    <string name="Cancel">Cancel</string>
 </resources>
